@@ -1,0 +1,37 @@
+{
+  "code": "L-06",
+  "title": "Web Boss Debug Arena",
+  "notice": "Educational project inspired by EETEPA Vilhena Alves. It is not an official institutional system and does not use real student data.",
+  "missions": [
+    {
+      "id": "visual",
+      "title": "Patch The Visual Bug",
+      "duration": 6,
+      "points": 10,
+      "story": "A card looks broken on the projector because spacing and hierarchy collapsed.",
+      "challenge": "Identify whether the likely bug is margin, display, or font sizing.",
+      "hint": "Ask what changed: position, spacing, or text.",
+      "deliverable": "Bug type and fix note."
+    },
+    {
+      "id": "access",
+      "title": "Unlock Accessibility",
+      "duration": 8,
+      "points": 15,
+      "story": "A user cannot understand a control because the label is missing.",
+      "challenge": "Choose the HTML improvement that makes the control clearer.",
+      "hint": "Labels, alt text, contrast, and focus state all matter.",
+      "deliverable": "Accessibility patch."
+    },
+    {
+      "id": "responsive",
+      "title": "Beat The Mobile Boss",
+      "duration": 9,
+      "points": 20,
+      "story": "The layout overflows on a small screen before the final boss is defeated.",
+      "challenge": "Propose a media-query or grid/flex fix.",
+      "hint": "One-column mobile layouts often save the day.",
+      "deliverable": "Responsive fix plan."
+    }
+  ]
+}

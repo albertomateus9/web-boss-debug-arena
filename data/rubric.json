@@ -1,0 +1,24 @@
+{
+  "rubric": [
+    {
+      "label": "Evidence quality",
+      "points": 10,
+      "description": "Uses clues, calculations or technical terms to justify the answer."
+    },
+    {
+      "label": "Team collaboration",
+      "points": 5,
+      "description": "Distributes roles and keeps the group focused."
+    },
+    {
+      "label": "Communication",
+      "points": 5,
+      "description": "Presents the reasoning clearly and respectfully."
+    },
+    {
+      "label": "Improvement idea",
+      "points": 5,
+      "description": "Suggests a next step after the mission."
+    }
+  ]
+}

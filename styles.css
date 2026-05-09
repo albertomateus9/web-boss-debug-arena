@@ -1,0 +1,262 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f8fb;
+  --surface: #ffffff;
+  --ink: #111827;
+  --muted: #607085;
+  --line: #d9e2ee;
+  --accent: #4f46e5;
+  --accent-2: #16a34a;
+  --good: #15803d;
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%), var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(1.05); }
+button:focus, input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 25%, transparent); outline-offset: 2px; }
+
+.app-header, footer {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px 0 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  min-width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 900;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 4px; font-size: clamp(1.8rem, 4vw, 3.4rem); line-height: 0.98; }
+h2 { font-size: 1.25rem; margin-bottom: 12px; }
+h3 { font-size: 1rem; margin-bottom: 6px; }
+p, small, summary { color: var(--muted); }
+
+nav { display: flex; flex-wrap: wrap; gap: 12px; }
+nav a { color: var(--muted); text-decoration: none; font-weight: 800; }
+nav a:hover { color: var(--accent); }
+
+.layout {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+}
+
+.stage, .panel, .cards-section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.stage {
+  padding: 18px;
+  min-width: 0;
+}
+
+.stage-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.status-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.timer {
+  text-align: right;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  min-width: 128px;
+}
+
+#timerValue {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 950;
+}
+
+canvas {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  border-radius: 10px;
+  background: #0f172a;
+  border: 1px solid var(--line);
+}
+
+.mission-card {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 14px 0;
+  background: #fbfdff;
+}
+
+.deliverable {
+  margin-bottom: 0;
+  color: var(--ink);
+}
+
+.teacher-panel {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.panel, .cards-section {
+  padding: 18px;
+}
+
+.team-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+input {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 12px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controls.compact { margin: 10px 0; }
+.controls button:nth-child(2n) { background: var(--accent-2); }
+.controls button:nth-child(3n) { background: var(--ink); }
+
+.scoreboard, .rubric, .print-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.team-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.team-score {
+  font-size: 1.4rem;
+  font-weight: 950;
+}
+
+.score-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.score-actions button {
+  padding: 7px 9px;
+  background: var(--ink);
+}
+
+.rubric-item, .mission-print-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.print-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cards-section {
+  grid-column: 1 / -1;
+  margin-bottom: 28px;
+}
+
+footer {
+  padding: 0 0 32px;
+}
+
+.projector .layout {
+  grid-template-columns: 1fr;
+}
+
+.projector .teacher-panel {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 920px) {
+  .app-header, .layout { width: min(100% - 20px, 1240px); }
+  .app-header, .stage-toolbar { align-items: stretch; flex-direction: column; }
+  .layout, .projector .teacher-panel, .print-grid { grid-template-columns: 1fr; }
+  .timer { text-align: left; }
+}
+
+@media print {
+  .app-header, .stage, .teacher-panel, footer { display: none; }
+  body { background: #fff; }
+  .layout, .cards-section, .print-grid { display: block; width: 100%; box-shadow: none; border: 0; }
+  .mission-print-card { break-inside: avoid; margin-bottom: 12px; }
+}

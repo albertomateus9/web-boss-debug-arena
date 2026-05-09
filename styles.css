@@ -1,16 +1,13 @@
 :root {
   color-scheme: light;
-  --bg: #f6f8fb;
+  --bg: #eef4f8;
   --surface: #ffffff;
-  --ink: #111827;
-  --muted: #607085;
-  --line: #d9e2ee;
+  --ink: #101827;
+  --muted: #4b5f7a;
+  --line: #d4dfec;
   --accent: #4f46e5;
   --accent-2: #16a34a;
-  --good: #15803d;
-  --warn: #b45309;
-  --danger: #b91c1c;
-  --shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+  --shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -18,27 +15,25 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%), var(--bg);
+  background: var(--bg);
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-button, input {
-  font: inherit;
-}
+button, input { font: inherit; }
 
 button {
   border: 0;
   border-radius: 8px;
-  padding: 11px 14px;
+  padding: 12px 15px;
   background: var(--accent);
   color: #ffffff;
-  font-weight: 800;
+  font-weight: 850;
   cursor: pointer;
 }
 
 button:hover { filter: brightness(1.05); }
-button:focus, input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 25%, transparent); outline-offset: 2px; }
+button:focus, input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 28%, transparent); outline-offset: 2px; }
 
 .app-header, footer {
   width: min(1240px, calc(100% - 32px));
@@ -67,31 +62,32 @@ button:focus, input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 
   border-radius: 50%;
   background: var(--ink);
   color: #fff;
-  font-weight: 900;
+  font-weight: 950;
 }
 
 h1, h2, h3, p { margin-top: 0; }
-h1 { margin-bottom: 4px; font-size: clamp(1.8rem, 4vw, 3.4rem); line-height: 0.98; }
-h2 { font-size: 1.25rem; margin-bottom: 12px; }
+h1 { margin-bottom: 4px; font-size: clamp(1.8rem, 4vw, 3.35rem); line-height: 1; }
+h2 { font-size: 1.24rem; margin-bottom: 12px; }
 h3 { font-size: 1rem; margin-bottom: 6px; }
-p, small, summary { color: var(--muted); }
+p, small, summary, li { color: var(--muted); }
+strong { color: var(--ink); }
 
 nav { display: flex; flex-wrap: wrap; gap: 12px; }
-nav a { color: var(--muted); text-decoration: none; font-weight: 800; }
+nav a { color: var(--muted); text-decoration: none; font-weight: 850; }
 nav a:hover { color: var(--accent); }
 
 .layout {
   width: min(1240px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 18px;
 }
 
 .stage, .panel, .cards-section {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: var(--shadow);
 }
 
@@ -111,17 +107,17 @@ nav a:hover { color: var(--accent); }
 .status-pill {
   display: inline-flex;
   border-radius: 999px;
-  padding: 6px 10px;
+  padding: 7px 11px;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  font-weight: 900;
+  background: color-mix(in srgb, var(--accent) 13%, white);
+  font-weight: 950;
   margin-bottom: 10px;
 }
 
 .timer {
   text-align: right;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 10px 14px;
   min-width: 128px;
 }
@@ -137,7 +133,7 @@ canvas {
   width: 100%;
   aspect-ratio: 16 / 9;
   display: block;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #0f172a;
   border: 1px solid var(--line);
 }
@@ -151,10 +147,7 @@ canvas {
   background: #fbfdff;
 }
 
-.deliverable {
-  margin-bottom: 0;
-  color: var(--ink);
-}
+.deliverable, .criterion { margin-bottom: 6px; color: var(--ink); }
 
 .teacher-panel {
   display: grid;
@@ -162,9 +155,9 @@ canvas {
   align-content: start;
 }
 
-.panel, .cards-section {
-  padding: 18px;
-}
+.panel, .cards-section { padding: 18px; }
+.teacher-guide ul { padding-left: 18px; margin: 0; }
+.teacher-guide li + li { margin-top: 8px; }
 
 .team-form {
   display: grid;
@@ -176,7 +169,7 @@ input {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 11px 12px;
+  padding: 12px;
 }
 
 .controls {
@@ -205,7 +198,7 @@ input {
 }
 
 .team-score {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 950;
 }
 
@@ -215,7 +208,7 @@ input {
 }
 
 .score-actions button {
-  padding: 7px 9px;
+  padding: 8px 10px;
   background: var(--ink);
 }
 
@@ -235,23 +228,26 @@ input {
   margin-bottom: 28px;
 }
 
-footer {
-  padding: 0 0 32px;
+footer { padding: 0 0 32px; }
+
+.projector {
+  --bg: #e9f1f6;
+  --ink: #07111f;
 }
 
-.projector .layout {
-  grid-template-columns: 1fr;
-}
-
-.projector .teacher-panel {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
+.projector .layout { grid-template-columns: 1fr; }
+.projector .teacher-panel { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.projector button { padding: 14px 18px; font-size: 1.06rem; }
+.projector .stage { border-width: 2px; }
+.projector .status-pill, .projector h2 { font-size: 1.35rem; }
+.projector #timerValue { font-size: 2.45rem; }
 
 @media (max-width: 920px) {
   .app-header, .layout { width: min(100% - 20px, 1240px); }
   .app-header, .stage-toolbar { align-items: stretch; flex-direction: column; }
   .layout, .projector .teacher-panel, .print-grid { grid-template-columns: 1fr; }
   .timer { text-align: left; }
+  .team-form { grid-template-columns: 1fr; }
 }
 
 @media print {

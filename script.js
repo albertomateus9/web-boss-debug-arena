@@ -1,11 +1,10 @@
 const PROJECT = {
   "code": "L-06",
   "slug": "web-boss-debug-arena",
-  "title": "Web Boss Debug Arena",
-  "tagline": "Defeat interface bugs with HTML, CSS and JavaScript reasoning.",
-  "description": "Debug arena where teams fix visual, accessibility, form and responsive design challenges in playful rounds.",
-  "discipline": "Web Technologies, Design, and Programming Logic",
-  "disciplinePt": "Tecnologias Web, Design e Logica de Programacao",
+  "title": "Arena Chefão Web: Depuração",
+  "tagline": "Derrote falhas de interface usando raciocínio em HTML, CSS e JavaScript.",
+  "description": "Arena de depuração em que equipes corrigem desafios visuais, acessibilidade, formulários e responsividade em rodadas lúdicas.",
+  "discipline": "Tecnologias Web, Design e Lógica de Programação",
   "visual": "debug",
   "accent": "#4f46e5",
   "accent2": "#16a34a",
@@ -15,53 +14,78 @@ const PROJECT = {
     "css"
   ],
   "competencies": [
-    "debugging",
-    "accessibility",
-    "responsive design",
-    "frontend reasoning"
+    "depuração",
+    "acessibilidade",
+    "design responsivo",
+    "raciocínio de interface web"
   ],
+  "guide": {
+    "objective": "Transformar falhas comuns de interface web em desafios rápidos e cooperativos.",
+    "prep": "Explique que cada rodada exige observar, formular hipótese e propor correção.",
+    "conduct": "Peça que a equipe diga qual sintoma viu, qual causa suspeita e qual ajuste faria.",
+    "closing": "Conecte as respostas a boas práticas de acessibilidade e responsividade."
+  },
   "missions": [
     {
       "id": "visual",
-      "title": "Patch The Visual Bug",
+      "title": "Corrigir o Bug Visual",
       "duration": 6,
       "points": 10,
-      "story": "A card looks broken on the projector because spacing and hierarchy collapsed.",
-      "challenge": "Identify whether the likely bug is margin, display, or font sizing.",
-      "hint": "Ask what changed: position, spacing, or text.",
-      "deliverable": "Bug type and fix note."
+      "story": "Um card aparece quebrado no projetor porque espaçamento e hierarquia visual desabaram.",
+      "challenge": "Identificar se o bug provável é margem, display ou tamanho de fonte.",
+      "hint": "Pergunte o que mudou: posição, espaçamento ou texto.",
+      "deliverable": "Tipo de bug e nota de correção.",
+      "criterion": "Pontue observação do sintoma e hipótese de correção."
     },
     {
-      "id": "access",
-      "title": "Unlock Accessibility",
+      "id": "acessibilidade",
+      "title": "Liberar a Acessibilidade",
       "duration": 8,
       "points": 15,
-      "story": "A user cannot understand a control because the label is missing.",
-      "challenge": "Choose the HTML improvement that makes the control clearer.",
-      "hint": "Labels, alt text, contrast, and focus state all matter.",
-      "deliverable": "Accessibility patch."
+      "story": "Uma pessoa usuária não entende um controle porque o rótulo está ausente.",
+      "challenge": "Escolher a melhoria em HTML que torna o controle mais claro.",
+      "hint": "Rótulos, texto alternativo, contraste e foco importam.",
+      "deliverable": "Correção de acessibilidade.",
+      "criterion": "Pontue clareza, inclusão e justificativa técnica."
     },
     {
-      "id": "responsive",
-      "title": "Beat The Mobile Boss",
+      "id": "responsivo",
+      "title": "Vencer o Chefão do Celular",
       "duration": 9,
       "points": 20,
-      "story": "The layout overflows on a small screen before the final boss is defeated.",
-      "challenge": "Propose a media-query or grid/flex fix.",
-      "hint": "One-column mobile layouts often save the day.",
-      "deliverable": "Responsive fix plan."
+      "story": "O layout estoura em tela pequena antes do chefão final ser derrotado.",
+      "challenge": "Propor correção com media query, grid ou flexbox.",
+      "hint": "Layouts de uma coluna costumam salvar a versão mobile.",
+      "deliverable": "Plano de correção responsiva.",
+      "criterion": "Pontue solução aplicável e cuidado com leitura em celular."
     }
   ]
 };
-const RUBRIC = [
-  { label: 'Evidence quality', points: 10, description: 'Uses clues, calculations or technical terms to justify the answer.' },
-  { label: 'Team collaboration', points: 5, description: 'Distributes roles and keeps the group focused.' },
-  { label: 'Communication', points: 5, description: 'Presents the reasoning clearly and respectfully.' },
-  { label: 'Improvement idea', points: 5, description: 'Suggests a next step after the mission.' },
+const RUBRICA = [
+  {
+    "label": "Qualidade da evidência",
+    "points": 10,
+    "description": "Usa pistas, cálculos ou termos técnicos para justificar a resposta."
+  },
+  {
+    "label": "Colaboração da equipe",
+    "points": 5,
+    "description": "Distribui papéis e mantém o grupo focado na missão."
+  },
+  {
+    "label": "Comunicação técnica",
+    "points": 5,
+    "description": "Apresenta o raciocínio com clareza, respeito e vocabulário adequado."
+  },
+  {
+    "label": "Ideia de melhoria",
+    "points": 5,
+    "description": "Propõe um próximo passo realista depois da missão."
+  }
 ];
 
-const storageKey = 'playful-classroom:' + PROJECT.slug;
-const demoNames = ['Equipe Delta', 'Equipe Nexus', 'Equipe Pixel'];
+const storageKey = 'aulas-ludicas:' + PROJECT.slug;
+const demoNames = ['Equipe Açaí', 'Equipe Ver-o-Peso', 'Equipe Marajó'];
 const state = loadState();
 let timerId = null;
 let remainingSeconds = PROJECT.missions[0].duration * 60;
@@ -74,6 +98,7 @@ const els = {
   phaseChallenge: document.querySelector('#phaseChallenge'),
   phaseHint: document.querySelector('#phaseHint'),
   phaseDeliverable: document.querySelector('#phaseDeliverable'),
+  phaseCriterion: document.querySelector('#phaseCriterion'),
   timerValue: document.querySelector('#timerValue'),
   timerLabel: document.querySelector('#timerLabel'),
   teamName: document.querySelector('#teamName'),
@@ -109,12 +134,16 @@ function formatTime(seconds) {
   return minutes + ':' + secs;
 }
 
-function resetTimerToMission() {
-  remainingSeconds = activeMission().duration * 60;
-  renderTimer('ready');
+function formatDate(value = new Date()) {
+  return value.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
 }
 
-function renderTimer(label = 'running') {
+function resetTimerToMission() {
+  remainingSeconds = activeMission().duration * 60;
+  renderTimer('pronto');
+}
+
+function renderTimer(label = 'em andamento') {
   els.timerValue.textContent = formatTime(remainingSeconds);
   els.timerLabel.textContent = label;
 }
@@ -126,19 +155,20 @@ function renderMission() {
   els.phaseChallenge.textContent = mission.challenge;
   els.phaseHint.textContent = mission.hint;
   els.phaseDeliverable.textContent = mission.deliverable;
+  els.phaseCriterion.textContent = mission.criterion;
   drawScene();
 }
 
 function renderTeams() {
   if (!state.teams.length) {
-    els.scoreboard.innerHTML = '<p>No teams yet. Add fictional teams or load demo teams.</p>';
+    els.scoreboard.innerHTML = '<p>Nenhuma equipe ainda. Adicione equipes fictícias ou carregue equipes demo.</p>';
     return;
   }
   els.scoreboard.innerHTML = state.teams.map((team, index) => `
     <article class="team-row">
       <div>
         <strong>${team.name}</strong>
-        <p>Evidence notes: ${team.notes || 'ready'}</p>
+        <p>Registro: ${team.notes || 'pronto'}</p>
       </div>
       <div>
         <div class="team-score">${team.score}</div>
@@ -153,7 +183,7 @@ function renderTeams() {
 }
 
 function renderRubric() {
-  els.rubricList.innerHTML = RUBRIC.map((item) => `
+  els.rubricList.innerHTML = RUBRICA.map((item) => `
     <article class="rubric-item">
       <strong>${item.label} (+${item.points})</strong>
       <p>${item.description}</p>
@@ -166,9 +196,11 @@ function renderCards() {
     <article class="mission-print-card">
       <strong>${PROJECT.code}.${index + 1} - ${mission.title}</strong>
       <p>${mission.story}</p>
-      <p><strong>Challenge:</strong> ${mission.challenge}</p>
-      <p><strong>Deliverable:</strong> ${mission.deliverable}</p>
-      <p><strong>Time:</strong> ${mission.duration} min | <strong>Points:</strong> ${mission.points}</p>
+      <p><strong>Desafio:</strong> ${mission.challenge}</p>
+      <p><strong>Pista do professor:</strong> ${mission.hint}</p>
+      <p><strong>Evidência esperada:</strong> ${mission.deliverable}</p>
+      <p><strong>Critério:</strong> ${mission.criterion}</p>
+      <p><strong>Tempo:</strong> ${mission.duration} min | <strong>Pontos:</strong> ${mission.points}</p>
     </article>
   `).join('');
 }
@@ -178,14 +210,14 @@ function renderAll() {
   renderTeams();
   renderRubric();
   renderCards();
-  renderTimer(timerId ? 'running' : 'ready');
+  renderTimer(timerId ? 'em andamento' : 'pronto');
 }
 
 function addTeam(name) {
   const clean = name.trim();
   if (!clean) return;
   state.teams.push({ name: clean, score: 0, notes: activeMission().title });
-  state.log.push({ action: 'team-added', name: clean, phase: activeMission().title, at: new Date().toISOString() });
+  state.log.push({ acao: 'equipe adicionada', nome: clean, fase: activeMission().title, quando: formatDate() });
   saveState();
   renderTeams();
 }
@@ -195,14 +227,14 @@ function changeScore(index, delta) {
   if (!team) return;
   team.score = Math.max(0, team.score + Number(delta));
   team.notes = activeMission().title;
-  state.log.push({ action: 'score', team: team.name, delta: Number(delta), phase: activeMission().title, at: new Date().toISOString() });
+  state.log.push({ acao: 'pontuação', equipe: team.name, delta: Number(delta), fase: activeMission().title, quando: formatDate() });
   saveState();
   renderTeams();
 }
 
 function nextPhase(step) {
   state.phaseIndex = Math.min(PROJECT.missions.length - 1, Math.max(0, state.phaseIndex + step));
-  state.log.push({ action: 'phase', phase: activeMission().title, at: new Date().toISOString() });
+  state.log.push({ acao: 'fase', fase: activeMission().title, quando: formatDate() });
   saveState();
   resetTimerToMission();
   renderMission();
@@ -210,14 +242,14 @@ function nextPhase(step) {
 
 function startTimer() {
   if (timerId) return;
-  renderTimer('running');
+  renderTimer('em andamento');
   timerId = window.setInterval(() => {
     remainingSeconds -= 1;
-    renderTimer(remainingSeconds <= 0 ? 'time' : 'running');
+    renderTimer(remainingSeconds <= 0 ? 'tempo encerrado' : 'em andamento');
     if (remainingSeconds <= 0) {
       window.clearInterval(timerId);
       timerId = null;
-      state.log.push({ action: 'timer-ended', phase: activeMission().title, at: new Date().toISOString() });
+      state.log.push({ acao: 'tempo encerrado', fase: activeMission().title, quando: formatDate() });
       saveState();
     }
   }, 1000);
@@ -226,7 +258,7 @@ function startTimer() {
 function pauseTimer() {
   if (timerId) window.clearInterval(timerId);
   timerId = null;
-  renderTimer('paused');
+  renderTimer('pausado');
 }
 
 function resetTimer() {
@@ -236,23 +268,31 @@ function resetTimer() {
 
 function exportMarkdown() {
   const lines = [
-    '# ' + PROJECT.title,
+    '# Relatório de aula - ' + PROJECT.title,
     '',
-    'Mission: ' + activeMission().title,
-    'Generated: ' + new Date().toISOString(),
+    '- Projeto: ' + PROJECT.title,
+    '- Missão atual: ' + activeMission().title,
+    '- Gerado em: ' + formatDate(),
+    '- Política de dados: Sem login, sem servidor, sem APIs externas e com dados salvos apenas no localStorage do navegador.',
     '',
-    '## Teams',
-    ...state.teams.map((team) => '- ' + team.name + ': ' + team.score + ' points'),
+    '## Roteiro do professor',
+    '- Objetivo: ' + PROJECT.guide.objective,
+    '- Preparação: ' + PROJECT.guide.prep,
+    '- Condução: ' + PROJECT.guide.conduct,
+    '- Fechamento: ' + PROJECT.guide.closing,
     '',
-    '## Log',
-    ...state.log.map((item) => '- ' + item.at + ' | ' + item.action + ' | ' + (item.team || item.name || item.phase || 'classroom')),
+    '## Equipes',
+    ...(state.teams.length ? state.teams.map((team) => '- ' + team.name + ': ' + team.score + ' pontos') : ['- Nenhuma equipe registrada.']),
+    '',
+    '## Registro da aula',
+    ...(state.log.length ? state.log.map((item) => '- ' + item.quando + ' | ' + item.acao + ' | ' + (item.equipe || item.nome || item.fase || 'turma')) : ['- Sem eventos registrados.']),
   ];
-  download(PROJECT.slug + '-class-report.md', lines.join('\n') + '\n', 'text/markdown');
+  download('relatorio-aula.md', lines.join('\n') + '\n', 'text/markdown');
 }
 
 function exportCsv() {
-  const rows = ['team,score,last_note', ...state.teams.map((team) => [team.name, team.score, team.notes].map(csvCell).join(','))];
-  download(PROJECT.slug + '-scoreboard.csv', rows.join('\n') + '\n', 'text/csv');
+  const rows = ['equipe,pontuacao,ultima_missao', ...state.teams.map((team) => [team.name, team.score, team.notes].map(csvCell).join(','))];
+  download('placar-equipes.csv', rows.join('\n') + '\n', 'text/csv');
 }
 
 function csvCell(value) {
@@ -305,7 +345,7 @@ function drawNode(x, y, label, fill = PROJECT.accent) {
 }
 
 function drawControl() {
-  const nodes = [['Brief', 170, 210], ['Teams', 360, 130], ['Mission', 560, 230], ['Debrief', 770, 155], ['Report', 720, 370]];
+  const nodes = [['Abertura', 170, 210], ['Equipes', 360, 130], ['Missão', 560, 230], ['Síntese', 770, 155], ['Relatório', 720, 370]];
   ctx.strokeStyle = '#94a3b8';
   ctx.lineWidth = 4;
   ctx.beginPath();
@@ -335,7 +375,7 @@ function drawPacket() {
 }
 
 function drawIslands() {
-  const islands = [[180, 250, 'Base'], [410, 150, 'VLAN'], [610, 310, 'CIDR'], [790, 190, 'Route']];
+  const islands = [[180, 250, 'Base'], [410, 150, 'VLAN'], [610, 310, 'CIDR'], [790, 190, 'Rota']];
   islands.forEach((island, index) => {
     ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent;
     ctx.beginPath();
@@ -349,15 +389,15 @@ function drawIslands() {
 }
 
 function drawDetective() {
-  const clues = ['CSV', 'JSON', 'Nulls', 'Dupes', 'Story'];
+  const clues = ['CSV', 'JSON', 'Nulos', 'Duplicados', 'Síntese'];
   clues.forEach((clue, index) => {
     const x = 140 + index * 170;
     const y = 180 + (index % 2) * 150;
     ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : '#f8fafc';
-    ctx.fillRect(x - 56, y - 36, 112, 72);
+    ctx.fillRect(x - 64, y - 36, 128, 72);
     ctx.strokeStyle = PROJECT.accent;
     ctx.lineWidth = 4;
-    ctx.strokeRect(x - 56, y - 36, 112, 72);
+    ctx.strokeRect(x - 64, y - 36, 128, 72);
     ctx.fillStyle = '#111827';
     ctx.font = '800 18px system-ui';
     ctx.textAlign = 'center';
@@ -366,8 +406,8 @@ function drawDetective() {
 }
 
 function drawCourt() {
-  drawNode(480, 130, 'Judge', PROJECT.accent2);
-  [['Evidence', 220, 320], ['Policy', 480, 350], ['Verdict', 740, 320]].forEach((node, index) => {
+  drawNode(480, 130, 'Juiz', PROJECT.accent2);
+  [['Evidência', 220, 320], ['Política', 480, 350], ['Veredito', 740, 320]].forEach((node, index) => {
     drawNode(node[1], node[2], node[0], index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent);
   });
   ctx.strokeStyle = '#f8fafc';
@@ -376,12 +416,12 @@ function drawCourt() {
 }
 
 function drawDebug() {
-  const bugs = ['HTML', 'CSS', 'JS', 'A11Y', 'Mobile'];
+  const bugs = ['HTML', 'CSS', 'JS', 'A11Y', 'Celular'];
   bugs.forEach((bug, index) => {
     const x = 150 + index * 165;
     const y = 270;
     ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent;
-    ctx.fillRect(x - 52, y - 52, 104, 104);
+    ctx.fillRect(x - 56, y - 52, 112, 104);
     ctx.fillStyle = '#fff';
     ctx.font = '900 19px system-ui';
     ctx.textAlign = 'center';
@@ -391,14 +431,14 @@ function drawDebug() {
 
 function drawMissionProgress() {
   const mission = activeMission();
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.fillRect(28, 28, 360, 68);
+  ctx.fillStyle = 'rgba(255,255,255,0.94)';
+  ctx.fillRect(28, 28, 430, 72);
   ctx.fillStyle = '#111827';
   ctx.font = '900 22px system-ui';
   ctx.textAlign = 'left';
   ctx.fillText(mission.title, 46, 58);
   ctx.font = '700 14px system-ui';
-  ctx.fillText('Phase ' + (state.phaseIndex + 1) + '/' + PROJECT.missions.length + ' | +' + mission.points + ' points', 46, 82);
+  ctx.fillText('Fase ' + (state.phaseIndex + 1) + '/' + PROJECT.missions.length + ' | +' + mission.points + ' pontos', 46, 84);
 }
 
 document.querySelector('#addTeam').addEventListener('click', () => {
@@ -416,7 +456,7 @@ document.querySelector('#demoTeams').addEventListener('click', () => {
 });
 document.querySelector('#clearTeams').addEventListener('click', () => {
   state.teams = [];
-  state.log.push({ action: 'teams-cleared', at: new Date().toISOString() });
+  state.log.push({ acao: 'equipes removidas', quando: formatDate() });
   saveState();
   renderTeams();
 });
@@ -431,7 +471,7 @@ document.querySelector('#pauseTimer').addEventListener('click', pauseTimer);
 document.querySelector('#resetTimer').addEventListener('click', resetTimer);
 document.querySelector('#toggleProjector').addEventListener('click', (event) => {
   const active = document.body.classList.toggle('projector');
-  event.currentTarget.textContent = active ? 'Normal mode' : 'Projector mode';
+  event.currentTarget.textContent = active ? 'Modo normal' : 'Modo projetor';
 });
 document.querySelector('#exportMarkdown').addEventListener('click', exportMarkdown);
 document.querySelector('#exportCsv').addEventListener('click', exportCsv);

@@ -1,24 +1,24 @@
 {
   "rubric": [
     {
-      "label": "Evidence quality",
+      "label": "Qualidade da evidência",
       "points": 10,
-      "description": "Uses clues, calculations or technical terms to justify the answer."
+      "description": "Usa pistas, cálculos ou termos técnicos para justificar a resposta."
     },
     {
-      "label": "Team collaboration",
+      "label": "Colaboração da equipe",
       "points": 5,
-      "description": "Distributes roles and keeps the group focused."
+      "description": "Distribui papéis e mantém o grupo focado na missão."
     },
     {
-      "label": "Communication",
+      "label": "Comunicação técnica",
       "points": 5,
-      "description": "Presents the reasoning clearly and respectfully."
+      "description": "Apresenta o raciocínio com clareza, respeito e vocabulário adequado."
     },
     {
-      "label": "Improvement idea",
+      "label": "Ideia de melhoria",
       "points": 5,
-      "description": "Suggests a next step after the mission."
+      "description": "Propõe um próximo passo realista depois da missão."
     }
   ]
 }

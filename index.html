@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Web Boss Debug Arena</title>
-  <meta name="description" content="Debug arena where teams fix visual, accessibility, form and responsive design challenges in playful rounds.">
+  <title>Arena Chefão Web: Depuração</title>
+  <meta name="description" content="Arena de depuração em que equipes corrigem desafios visuais, acessibilidade, formulários e responsividade em rodadas lúdicas.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,85 +12,97 @@
     <div class="brand">
       <span class="brand-mark">L-06</span>
       <div>
-        <h1>Web Boss Debug Arena</h1>
-        <p>Defeat interface bugs with HTML, CSS and JavaScript reasoning.</p>
+        <h1>Arena Chefão Web: Depuração</h1>
+        <p>Derrote falhas de interface usando raciocínio em HTML, CSS e JavaScript.</p>
       </div>
     </div>
-    <nav aria-label="Teacher shortcuts">
-      <a href="#teams">Teams</a>
-      <a href="#mission">Mission</a>
-      <a href="#cards">Cards</a>
+    <nav aria-label="Atalhos do professor">
+      <a href="#equipes">Equipes</a>
+      <a href="#missao">Missão</a>
+      <a href="#cartas">Cartas</a>
     </nav>
   </header>
 
   <main class="layout">
-    <section class="stage" id="mission">
+    <section class="stage" id="missao">
       <div class="stage-toolbar">
         <div>
-          <span class="status-pill">Teacher-led mission</span>
-          <h2 id="phaseTitle">Mission loading</h2>
+          <span class="status-pill">Missão conduzida pelo professor</span>
+          <h2 id="phaseTitle">Carregando missão</h2>
         </div>
         <div class="timer" aria-live="polite">
           <span id="timerValue">00:00</span>
-          <small id="timerLabel">ready</small>
+          <small id="timerLabel">pronto</small>
         </div>
       </div>
-      <canvas id="gameCanvas" width="960" height="540" aria-label="Mission map canvas"></canvas>
+      <canvas id="gameCanvas" width="960" height="540" aria-label="Mapa visual da missão"></canvas>
       <div class="mission-card">
         <p id="phaseStory"></p>
-        <h3>Challenge</h3>
+        <h3>Desafio</h3>
         <p id="phaseChallenge"></p>
         <details>
-          <summary>Show teacher hint</summary>
+          <summary>Mostrar pista do professor</summary>
           <p id="phaseHint"></p>
         </details>
-        <p class="deliverable"><strong>Deliverable:</strong> <span id="phaseDeliverable"></span></p>
+        <p class="deliverable"><strong>Evidência esperada:</strong> <span id="phaseDeliverable"></span></p>
+        <p class="criterion"><strong>Critério de pontuação:</strong> <span id="phaseCriterion"></span></p>
       </div>
       <div class="controls">
-        <button id="prevPhase" type="button">Previous phase</button>
-        <button id="nextPhase" type="button">Next phase</button>
-        <button id="startTimer" type="button">Start timer</button>
-        <button id="pauseTimer" type="button">Pause</button>
-        <button id="resetTimer" type="button">Reset timer</button>
-        <button id="toggleProjector" type="button">Projector mode</button>
+        <button id="prevPhase" type="button">Fase anterior</button>
+        <button id="nextPhase" type="button">Próxima fase</button>
+        <button id="startTimer" type="button">Iniciar tempo</button>
+        <button id="pauseTimer" type="button">Pausar</button>
+        <button id="resetTimer" type="button">Reiniciar tempo</button>
+        <button id="toggleProjector" type="button">Modo projetor</button>
       </div>
     </section>
 
     <aside class="teacher-panel">
-      <section id="teams" class="panel">
-        <h2>Teams</h2>
+      <section id="equipes" class="panel">
+        <h2>Equipes</h2>
         <div class="team-form">
-          <input id="teamName" type="text" maxlength="28" placeholder="Team name" aria-label="Team name">
-          <button id="addTeam" type="button">Add team</button>
+          <input id="teamName" type="text" maxlength="28" placeholder="Nome da equipe" aria-label="Nome da equipe">
+          <button id="addTeam" type="button">Adicionar</button>
         </div>
         <div class="controls compact">
-          <button id="demoTeams" type="button">Demo teams</button>
-          <button id="clearTeams" type="button">Clear</button>
+          <button id="demoTeams" type="button">Equipes exemplo</button>
+          <button id="clearTeams" type="button">Limpar</button>
         </div>
         <div id="scoreboard" class="scoreboard" aria-live="polite"></div>
       </section>
 
+      <section class="panel teacher-guide">
+        <h2>Roteiro do professor</h2>
+        <ul>
+          <li><strong>Objetivo:</strong> Transformar falhas comuns de interface web em desafios rápidos e cooperativos.</li>
+          <li><strong>Preparação:</strong> Explique que cada rodada exige observar, formular hipótese e propor correção.</li>
+          <li><strong>Condução:</strong> Peça que a equipe diga qual sintoma viu, qual causa suspeita e qual ajuste faria.</li>
+          <li><strong>Fechamento:</strong> Conecte as respostas a boas práticas de acessibilidade e responsividade.</li>
+        </ul>
+      </section>
+
       <section class="panel">
-        <h2>Scoring Rubric</h2>
+        <h2>Rubrica de pontuação</h2>
         <div id="rubricList" class="rubric"></div>
       </section>
 
       <section class="panel">
-        <h2>Exports</h2>
-        <button id="exportMarkdown" type="button">Export Markdown</button>
-        <button id="exportCsv" type="button">Export CSV</button>
-        <button id="printCards" type="button">Print mission cards</button>
+        <h2>Relatórios</h2>
+        <button id="exportMarkdown" type="button">Exportar Markdown</button>
+        <button id="exportCsv" type="button">Exportar CSV</button>
+        <button id="printCards" type="button">Imprimir cartas</button>
       </section>
     </aside>
 
-    <section class="cards-section" id="cards">
-      <h2>Printable Mission Cards</h2>
+    <section class="cards-section" id="cartas">
+      <h2>Cartas de missão imprimíveis</h2>
       <div id="missionCards" class="print-grid"></div>
     </section>
   </main>
 
   <footer>
-    <p>Educational project inspired by EETEPA Vilhena Alves. It is not an official institutional system and does not use real student data.</p>
+    <p>Projeto educacional inspirado na EETEPA Vilhena Alves. Não é sistema oficial institucional e não usa dados reais de estudantes.</p>
+    <p>Sem login, sem servidor, sem APIs externas e com dados salvos apenas no localStorage do navegador.</p>
   </footer>
 
   <script src="script.js"></script>

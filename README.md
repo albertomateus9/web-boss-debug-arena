@@ -1,78 +1,39 @@
-# Web Boss Debug Arena
+# Arena Chefão Web: Depuração
 
-Debug arena where teams fix visual, accessibility, form and responsive design challenges in playful rounds.
+Arena de depuração em que equipes corrigem desafios visuais, acessibilidade, formulários e responsividade em rodadas lúdicas.
 
-> Educational project inspired by EETEPA Vilhena Alves. It is not an official institutional system and does not use real student data.
+> Projeto educacional inspirado na EETEPA Vilhena Alves. Não é sistema oficial institucional e não usa dados reais de estudantes.
 
-## Overview
+## Visão Geral
 
-**Code:** L-06  
-**Discipline focus:** Web Technologies, Design, and Programming Logic  
-**Format:** Teacher-led classroom web game  
-**Suggested duration:** 25 to 35 minutes  
-**Public demo:** https://albertomateus9.github.io/web-boss-debug-arena/
-
-This project turns a technical lesson into a guided mission. The teacher creates fictional teams, starts a timer, reveals mission phases, scores evidence and exports a classroom report.
-
-## Classroom Flow
-
-- **Patch The Visual Bug:** Identify whether the likely bug is margin, display, or font sizing.
-- **Unlock Accessibility:** Choose the HTML improvement that makes the control clearer.
-- **Beat The Mobile Boss:** Propose a media-query or grid/flex fix.
-
-## Competencies
-
-- debugging
-- accessibility
-- responsive design
-- frontend reasoning
-
-## Run Locally
-
-Open `index.html` directly or serve the folder:
-
-```bash
-python -m http.server 8000
-```
-
-Then open `http://localhost:8000`.
-
-## Data Policy
-
-- Uses synthetic missions and fictional teams only.
-- Stores state only in browser `localStorage`.
-- Has no login, backend, external API or real student record.
-
----
-
-# Web Boss Debug Arena
-
-Debug arena where teams fix visual, accessibility, form and responsive design challenges in playful rounds.
-
-> Projeto educacional inspirado na EETEPA Vilhena Alves. Nao e sistema oficial institucional e nao usa dados reais de estudantes.
-
-## Visao Geral
-
-**Codigo:** L-06  
-**Foco disciplinar:** Tecnologias Web, Design e Logica de Programacao  
+**Código:** L-06  
+**Foco disciplinar:** Tecnologias Web, Design e Lógica de Programação  
 **Formato:** jogo web conduzido pelo professor  
 **Tempo sugerido:** 25 a 35 minutos  
-**Demo publica:** https://albertomateus9.github.io/web-boss-debug-arena/
+**Demonstração pública:** https://albertomateus9.github.io/web-boss-debug-arena/
 
-Este projeto transforma uma aula tecnica em uma missao guiada. O professor cria equipes ficticias, inicia cronometro, revela fases, pontua evidencias e exporta um relatorio da aula.
+Este projeto transforma uma aula técnica em uma missão guiada. O professor cria equipes fictícias, inicia o cronômetro, revela fases, pontua evidências e exporta relatório da aula.
 
-## Dinamica De Aula
+## Roteiro Do Professor
 
-- **Patch The Visual Bug:** Identify whether the likely bug is margin, display, or font sizing.
-- **Unlock Accessibility:** Choose the HTML improvement that makes the control clearer.
-- **Beat The Mobile Boss:** Propose a media-query or grid/flex fix.
+- **Objetivo:** Transformar falhas comuns de interface web em desafios rápidos e cooperativos.
+- **Preparação:** Explique que cada rodada exige observar, formular hipótese e propor correção.
+- **Condução:** Peça que a equipe diga qual sintoma viu, qual causa suspeita e qual ajuste faria.
+- **Fechamento:** Conecte as respostas a boas práticas de acessibilidade e responsividade.
+- **Critérios:** use a rubrica do app para pontuar evidência, colaboração, comunicação e melhoria.
 
-## Competencias
+## Missões
 
-- debugging
-- accessibility
-- responsive design
-- frontend reasoning
+- **Corrigir o Bug Visual (6 min):** Identificar se o bug provável é margem, display ou tamanho de fonte. Evidência: Tipo de bug e nota de correção.
+- **Liberar a Acessibilidade (8 min):** Escolher a melhoria em HTML que torna o controle mais claro. Evidência: Correção de acessibilidade.
+- **Vencer o Chefão do Celular (9 min):** Propor correção com media query, grid ou flexbox. Evidência: Plano de correção responsiva.
+
+## Competências
+
+- depuração
+- acessibilidade
+- design responsivo
+- raciocínio de interface web
 
 ## Como Rodar
 
@@ -84,12 +45,12 @@ python -m http.server 8000
 
 Depois abra `http://localhost:8000`.
 
-## Politica De Dados
+## Política De Dados
 
-- Usa apenas missoes sinteticas e equipes ficticias.
+- Usa apenas missões sintéticas e equipes fictícias.
 - Guarda estado apenas no `localStorage` do navegador.
-- Nao possui login, backend, API externa ou registro real de estudante.
+- Não possui login, servidor, API externa ou registro real de estudante.
 
-## License
+## Licença
 
-MIT. See [LICENSE](LICENSE).
+MIT. Consulte [LICENSE](LICENSE).

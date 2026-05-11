@@ -1,6 +1,15 @@
 {
   "code": "L-06",
   "title": "Arena Chefão Web: Depuração",
+  "fantasy": "Arena contra chefões de bug, com barra de vida, console de reparos e cartas HTML/CSS/JS.",
+  "playerVerb": "causar dano no bug",
+  "mechanic": {
+    "title": "Mecânica da rodada",
+    "prompt": "A equipe causa dano quando descreve sintoma, causa provável e correção aplicável.",
+    "reward": "Bug derrotado"
+  },
+  "teacherPrompt": "Trate cada resposta como ataque: observação correta, hipótese técnica e correção dão mais dano.",
+  "rewardLabel": "Bugs derrotados",
   "notice": "Projeto educacional inspirado na EETEPA Vilhena Alves. Não é sistema oficial institucional e não usa dados reais de estudantes.",
   "dataPolicy": "Sem login, sem servidor, sem APIs externas e com dados salvos apenas no localStorage do navegador.",
   "missions": [

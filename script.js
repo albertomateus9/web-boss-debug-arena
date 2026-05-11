@@ -59,7 +59,33 @@ const PROJECT = {
       "deliverable": "Plano de correção responsiva.",
       "criterion": "Pontue solução aplicável e cuidado com leitura em celular."
     }
-  ]
+  ],
+  "fantasy": "Arena contra chefões de bug, com barra de vida, console de reparos e cartas HTML/CSS/JS.",
+  "playerVerb": "causar dano no bug",
+  "layout": "boss",
+  "sceneLabels": [
+    "Sintoma",
+    "HTML",
+    "CSS",
+    "JS",
+    "A11Y",
+    "Mobile"
+  ],
+  "hud": {
+    "status": "Chefão de bug apareceu",
+    "primary": "Vida do bug",
+    "secondary": "Correção proposta",
+    "token": "Combo"
+  },
+  "mechanic": {
+    "title": "Mecânica da rodada",
+    "prompt": "A equipe causa dano quando descreve sintoma, causa provável e correção aplicável.",
+    "reward": "Bug derrotado"
+  },
+  "teacherPrompt": "Trate cada resposta como ataque: observação correta, hipótese técnica e correção dão mais dano.",
+  "rewardLabel": "Bugs derrotados",
+  "exportBase": "registro-arena-debug",
+  "csvBase": "placar-arena-debug"
 };
 const RUBRICA = [
   {
@@ -105,6 +131,7 @@ const els = {
   scoreboard: document.querySelector('#scoreboard'),
   rubricList: document.querySelector('#rubricList'),
   missionCards: document.querySelector('#missionCards'),
+  phaseRail: document.querySelector('#phaseRail'),
 };
 
 function loadState() {
@@ -156,12 +183,21 @@ function renderMission() {
   els.phaseHint.textContent = mission.hint;
   els.phaseDeliverable.textContent = mission.deliverable;
   els.phaseCriterion.textContent = mission.criterion;
+  renderPhaseRail();
   drawScene();
+}
+
+function renderPhaseRail() {
+  els.phaseRail.innerHTML = PROJECT.missions.map((mission, index) => `
+    <span class="${index === state.phaseIndex ? 'active' : ''}">
+      ${PROJECT.hud.token} ${index + 1}: ${mission.title}
+    </span>
+  `).join('');
 }
 
 function renderTeams() {
   if (!state.teams.length) {
-    els.scoreboard.innerHTML = '<p>Nenhuma equipe ainda. Adicione equipes fictícias ou carregue equipes demo.</p>';
+    els.scoreboard.innerHTML = '<p>Nenhuma equipe ainda. Adicione equipes fictícias ou carregue equipes exemplo.</p>';
     return;
   }
   els.scoreboard.innerHTML = state.teams.map((team, index) => `
@@ -195,6 +231,8 @@ function renderCards() {
   els.missionCards.innerHTML = PROJECT.missions.map((mission, index) => `
     <article class="mission-print-card">
       <strong>${PROJECT.code}.${index + 1} - ${mission.title}</strong>
+      <p><strong>Fantasia:</strong> ${PROJECT.fantasy}</p>
+      <p><strong>Papel da equipe:</strong> ${PROJECT.teacherPrompt}</p>
       <p>${mission.story}</p>
       <p><strong>Desafio:</strong> ${mission.challenge}</p>
       <p><strong>Pista do professor:</strong> ${mission.hint}</p>
@@ -271,7 +309,10 @@ function exportMarkdown() {
     '# Relatório de aula - ' + PROJECT.title,
     '',
     '- Projeto: ' + PROJECT.title,
+    '- Fantasia: ' + PROJECT.fantasy,
+    '- Verbo de jogo: ' + PROJECT.playerVerb,
     '- Missão atual: ' + activeMission().title,
+    '- Recompensa: ' + PROJECT.mechanic.reward,
     '- Gerado em: ' + formatDate(),
     '- Política de dados: Sem login, sem servidor, sem APIs externas e com dados salvos apenas no localStorage do navegador.',
     '',
@@ -287,12 +328,12 @@ function exportMarkdown() {
     '## Registro da aula',
     ...(state.log.length ? state.log.map((item) => '- ' + item.quando + ' | ' + item.acao + ' | ' + (item.equipe || item.nome || item.fase || 'turma')) : ['- Sem eventos registrados.']),
   ];
-  download('relatorio-aula.md', lines.join('\n') + '\n', 'text/markdown');
+  download(PROJECT.exportBase + '.md', lines.join('\n') + '\n', 'text/markdown');
 }
 
 function exportCsv() {
   const rows = ['equipe,pontuacao,ultima_missao', ...state.teams.map((team) => [team.name, team.score, team.notes].map(csvCell).join(','))];
-  download('placar-equipes.csv', rows.join('\n') + '\n', 'text/csv');
+  download(PROJECT.csvBase + '.csv', rows.join('\n') + '\n', 'text/csv');
 }
 
 function csvCell(value) {
@@ -313,8 +354,8 @@ function drawScene() {
   const height = canvas.height;
   ctx.clearRect(0, 0, width, height);
   const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, '#111827');
-  gradient.addColorStop(1, '#263145');
+  gradient.addColorStop(0, PROJECT.visual === 'detective' ? '#3b2618' : PROJECT.visual === 'court' ? '#2f1f1a' : '#101827');
+  gradient.addColorStop(1, PROJECT.visual === 'islands' ? '#164e63' : PROJECT.visual === 'debug' ? '#1e1b4b' : '#263145');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
   ctx.fillStyle = 'rgba(255,255,255,0.08)';
@@ -344,88 +385,222 @@ function drawNode(x, y, label, fill = PROJECT.accent) {
   ctx.fillText(label, x, y);
 }
 
-function drawControl() {
-  const nodes = [['Abertura', 170, 210], ['Equipes', 360, 130], ['Missão', 560, 230], ['Síntese', 770, 155], ['Relatório', 720, 370]];
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 4;
+function roundedRect(x, y, width, height, radius = 14) {
   ctx.beginPath();
-  nodes.forEach((node, index) => {
-    if (index === 0) ctx.moveTo(node[1], node[2]);
-    else ctx.lineTo(node[1], node[2]);
-  });
-  ctx.stroke();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
+function fillRounded(x, y, width, height, radius, fill, stroke = null) {
+  roundedRect(x, y, width, height, radius);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+}
+
+function labelText(text, x, y, size = 18, color = '#fff', align = 'center') {
+  ctx.fillStyle = color;
+  ctx.font = '900 ' + size + 'px system-ui';
+  ctx.textAlign = align;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+}
+
+function drawControl() {
+  fillRounded(72, 118, 816, 330, 24, 'rgba(15,118,110,0.16)', 'rgba(255,255,255,0.22)');
+  fillRounded(118, 160, 360, 210, 18, 'rgba(255,255,255,0.92)', PROJECT.accent);
+  labelText('MESA TÁTICA', 298, 190, 18, '#0f172a');
+  ctx.strokeStyle = '#0f766e';
+  ctx.lineWidth = 3;
+  for (let i = 0; i < 5; i += 1) {
+    ctx.beginPath();
+    ctx.moveTo(150, 230 + i * 24);
+    ctx.lineTo(440, 230 + i * 24);
+    ctx.stroke();
+  }
+  const nodes = [['Caso', 180, 278], ['Papéis', 285, 245], ['Ação', 390, 305]];
   nodes.forEach((node, index) => drawNode(node[1], node[2], node[0], index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent));
+  fillRounded(540, 150, 270, 230, 18, 'rgba(17,24,39,0.82)', 'rgba(255,255,255,0.22)');
+  labelText('RÁDIO DE EVENTOS', 675, 182, 18);
+  ctx.strokeStyle = PROJECT.accent2;
+  ctx.lineWidth = 5;
+  for (let i = 0; i < 7; i += 1) {
+    ctx.beginPath();
+    ctx.arc(590 + i * 32, 270, 14 + i * 2, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+  }
+  fillRounded(590, 320, 170, 42, 12, PROJECT.accent2);
+  labelText(PROJECT.mechanic.reward, 675, 342, 15);
 }
 
 function drawPacket() {
-  const labels = ['ARP', 'DNS', 'TCP', 'HTTP', 'OK'];
+  const labels = ['Origem', 'ARP', 'DNS', 'TCP', 'HTTP', 'Serviço'];
+  const active = Math.min(labels.length - 1, state.phaseIndex + 1);
+  ctx.strokeStyle = 'rgba(96,165,250,0.25)';
+  ctx.lineWidth = 18;
+  ctx.beginPath();
+  ctx.moveTo(95, 284);
   labels.forEach((label, index) => {
-    const x = 120 + index * 180;
-    const y = 260 + Math.sin(index) * 45;
+    const x = 95 + index * 155;
+    const y = 284 + Math.sin(index * 1.15) * 55;
+    ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  labels.forEach((label, index) => {
+    const x = 95 + index * 155;
+    const y = 284 + Math.sin(index * 1.15) * 55;
     if (index > 0) {
-      ctx.strokeStyle = '#60a5fa';
-      ctx.lineWidth = 6;
+      ctx.strokeStyle = index <= active ? '#60a5fa' : 'rgba(148,163,184,0.55)';
+      ctx.lineWidth = 7;
       ctx.beginPath();
-      ctx.moveTo(x - 180, 260 + Math.sin(index - 1) * 45);
+      ctx.moveTo(95 + (index - 1) * 155, 284 + Math.sin((index - 1) * 1.15) * 55);
       ctx.lineTo(x, y);
       ctx.stroke();
     }
-    drawNode(x, y, label, index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent);
+    drawNode(x, y, label, index === active ? PROJECT.accent2 : PROJECT.accent);
   });
+  const px = 95 + active * 155;
+  const py = 284 + Math.sin(active * 1.15) * 55;
+  fillRounded(px - 30, py - 88, 60, 38, 10, '#f59e0b');
+  labelText('PKT', px, py - 68, 15, '#111827');
+  ctx.strokeStyle = '#fef3c7';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 8]);
+  ctx.beginPath();
+  ctx.arc(px, py, 70, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
 }
 
 function drawIslands() {
-  const islands = [[180, 250, 'Base'], [410, 150, 'VLAN'], [610, 310, 'CIDR'], [790, 190, 'Rota']];
+  for (let y = 120; y < 500; y += 34) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    for (let x = 0; x <= canvas.width; x += 48) ctx.quadraticCurveTo(x + 24, y + 16, x + 48, y);
+    ctx.strokeStyle = 'rgba(186,230,253,0.45)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  const islands = [[155, 285, 'Base'], [360, 160, 'VLAN A'], [560, 340, 'CIDR'], [760, 210, 'Rota']];
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  islands.forEach((island, index) => {
+    if (index === 0) ctx.moveTo(island[0], island[1]);
+    else ctx.lineTo(island[0], island[1]);
+  });
+  ctx.stroke();
   islands.forEach((island, index) => {
     ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent;
     ctx.beginPath();
-    ctx.ellipse(island[0], island[1], 85, 52, 0.2, 0, Math.PI * 2);
+    ctx.ellipse(island[0], island[1], 92, 58, 0.2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.font = '800 20px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText(island[2], island[0], island[1] + 6);
+    ctx.fillStyle = '#dcfce7';
+    ctx.beginPath();
+    ctx.ellipse(island[0] - 18, island[1] - 12, 38, 20, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fef3c7';
+    ctx.fillRect(island[0] + 34, island[1] - 55, 5, 48);
+    ctx.fillStyle = index === state.phaseIndex ? '#f97316' : '#eab308';
+    ctx.beginPath();
+    ctx.moveTo(island[0] + 39, island[1] - 55);
+    ctx.lineTo(island[0] + 76, island[1] - 45);
+    ctx.lineTo(island[0] + 39, island[1] - 33);
+    ctx.fill();
+    labelText(island[2], island[0], island[1] + 10, 20);
   });
 }
 
 function drawDetective() {
-  const clues = ['CSV', 'JSON', 'Nulos', 'Duplicados', 'Síntese'];
+  fillRounded(70, 95, 820, 360, 18, '#7c4a2d', '#f8d6a2');
+  ctx.strokeStyle = 'rgba(254,243,199,0.75)';
+  ctx.lineWidth = 3;
+  const pins = [[170, 170], [340, 250], [515, 155], [690, 285], [790, 170]];
+  for (let i = 0; i < pins.length - 1; i += 1) {
+    ctx.beginPath();
+    ctx.moveTo(pins[i][0], pins[i][1]);
+    ctx.lineTo(pins[i + 1][0], pins[i + 1][1]);
+    ctx.stroke();
+  }
+  const clues = ['CSV', 'JSON', 'Nulos', 'Duplicados', 'Laudo'];
   clues.forEach((clue, index) => {
-    const x = 140 + index * 170;
-    const y = 180 + (index % 2) * 150;
-    ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : '#f8fafc';
-    ctx.fillRect(x - 64, y - 36, 128, 72);
-    ctx.strokeStyle = PROJECT.accent;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(x - 64, y - 36, 128, 72);
-    ctx.fillStyle = '#111827';
-    ctx.font = '800 18px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText(clue, x, y + 4);
+    const [x, y] = pins[index];
+    fillRounded(x - 62, y - 42, 124, 84, 10, index === state.phaseIndex ? '#fef3c7' : '#fff7ed', PROJECT.accent);
+    ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent;
+    ctx.beginPath();
+    ctx.arc(x - 42, y - 26, 8, 0, Math.PI * 2);
+    ctx.fill();
+    labelText(clue, x, y + 4, 18, '#111827');
   });
+  ctx.strokeStyle = '#f8fafc';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.arc(748, 374, 42, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(780, 406);
+  ctx.lineTo(828, 454);
+  ctx.stroke();
 }
 
 function drawCourt() {
-  drawNode(480, 130, 'Juiz', PROJECT.accent2);
-  [['Evidência', 220, 320], ['Política', 480, 350], ['Veredito', 740, 320]].forEach((node, index) => {
+  fillRounded(95, 310, 770, 95, 18, '#7c2d12', '#fed7aa');
+  fillRounded(330, 105, 300, 115, 18, '#92400e', '#fed7aa');
+  labelText('BANCADA DO JUIZ', 480, 150, 20);
+  drawNode(480, 240, 'Juiz', PROJECT.accent2);
+  [['Fatos', 185, 300], ['Política', 360, 340], ['LGPD', 600, 340], ['Veredito', 775, 300]].forEach((node, index) => {
     drawNode(node[1], node[2], node[0], index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent);
   });
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(110, 70, 740, 390);
+  ctx.strokeStyle = '#fde68a';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(480, 270);
+  ctx.lineTo(385, 330);
+  ctx.moveTo(480, 270);
+  ctx.lineTo(575, 330);
+  ctx.stroke();
+  labelText('EVIDÊNCIAS  |  ARGUMENTOS  |  PREVENÇÃO', 480, 435, 18);
 }
 
 function drawDebug() {
-  const bugs = ['HTML', 'CSS', 'JS', 'A11Y', 'Celular'];
+  fillRounded(90, 105, 330, 330, 24, 'rgba(79,70,229,0.22)', '#a5b4fc');
+  labelText('CHEFÃO BUG', 255, 150, 24);
+  ctx.fillStyle = PROJECT.accent2;
+  ctx.beginPath();
+  ctx.ellipse(255, 285, 96, 115, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#111827';
+  ctx.beginPath();
+  ctx.arc(225, 250, 12, 0, Math.PI * 2);
+  ctx.arc(285, 250, 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#111827';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.arc(255, 300, 42, 0.15, Math.PI - 0.15);
+  ctx.stroke();
+  fillRounded(500, 120, 330, 58, 16, '#111827', '#a5b4fc');
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(525, 141, Math.max(40, 250 - state.phaseIndex * 70), 18);
+  labelText('VIDA DO BUG', 665, 150, 15);
+  const bugs = ['Sintoma', 'HTML', 'CSS', 'JS', 'Mobile'];
   bugs.forEach((bug, index) => {
-    const x = 150 + index * 165;
-    const y = 270;
-    ctx.fillStyle = index === state.phaseIndex ? PROJECT.accent2 : PROJECT.accent;
-    ctx.fillRect(x - 56, y - 52, 112, 104);
-    ctx.fillStyle = '#fff';
-    ctx.font = '900 19px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText(bug, x, y + 6);
+    const x = 520 + (index % 2) * 170;
+    const y = 230 + Math.floor(index / 2) * 86;
+    fillRounded(x, y, 140, 58, 12, index === state.phaseIndex ? PROJECT.accent2 : '#eef2ff', PROJECT.accent);
+    labelText(bug, x + 70, y + 29, 16, index === state.phaseIndex ? '#fff' : '#111827');
   });
 }
 

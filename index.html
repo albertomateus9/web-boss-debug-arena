@@ -7,13 +7,14 @@
   <meta name="description" content="Arena de depuração em que equipes corrigem desafios visuais, acessibilidade, formulários e responsividade em rodadas lúdicas.">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="game game-debug layout-boss">
   <header class="app-header">
     <div class="brand">
       <span class="brand-mark">L-06</span>
       <div>
         <h1>Arena Chefão Web: Depuração</h1>
         <p>Derrote falhas de interface usando raciocínio em HTML, CSS e JavaScript.</p>
+        <p class="fantasy-line">Arena contra chefões de bug, com barra de vida, console de reparos e cartas HTML/CSS/JS.</p>
       </div>
     </div>
     <nav aria-label="Atalhos do professor">
@@ -27,15 +28,24 @@
     <section class="stage" id="missao">
       <div class="stage-toolbar">
         <div>
-          <span class="status-pill">Missão conduzida pelo professor</span>
+          <span class="status-pill">Chefão de bug apareceu</span>
           <h2 id="phaseTitle">Carregando missão</h2>
+          <p class="verb-line">Ação da turma: <strong>causar dano no bug</strong></p>
         </div>
         <div class="timer" aria-live="polite">
           <span id="timerValue">00:00</span>
           <small id="timerLabel">pronto</small>
         </div>
       </div>
-      <canvas id="gameCanvas" width="960" height="540" aria-label="Mapa visual da missão"></canvas>
+      <div class="arena-frame">
+        <canvas id="gameCanvas" width="960" height="540" aria-label="Mapa visual da missão"></canvas>
+        <div class="hud-strip" aria-label="HUD da missão">
+          <span>Vida do bug</span>
+          <span>Correção proposta</span>
+          <span>Bugs derrotados</span>
+        </div>
+        <div id="phaseRail" class="phase-rail"></div>
+      </div>
       <div class="mission-card">
         <p id="phaseStory"></p>
         <h3>Desafio</h3>
@@ -46,6 +56,11 @@
         </details>
         <p class="deliverable"><strong>Evidência esperada:</strong> <span id="phaseDeliverable"></span></p>
         <p class="criterion"><strong>Critério de pontuação:</strong> <span id="phaseCriterion"></span></p>
+      </div>
+      <div class="mechanic-panel">
+        <strong>Mecânica da rodada</strong>
+        <p>A equipe causa dano quando descreve sintoma, causa provável e correção aplicável.</p>
+        <span>Bug derrotado</span>
       </div>
       <div class="controls">
         <button id="prevPhase" type="button">Fase anterior</button>

@@ -12,7 +12,15 @@ Arena de depuração em que equipes corrigem desafios visuais, acessibilidade, f
 **Tempo sugerido:** 25 a 35 minutos  
 **Demonstração pública:** https://albertomateus9.github.io/web-boss-debug-arena/
 
-Este projeto transforma uma aula técnica em uma missão guiada. O professor cria equipes fictícias, inicia o cronômetro, revela fases, pontua evidências e exporta relatório da aula.
+Este projeto transforma uma aula técnica em uma experiência de jogo educacional. A fantasia central é: Arena contra chefões de bug, com barra de vida, console de reparos e cartas HTML/CSS/JS.
+
+## Como Conduzir A Dinâmica
+
+- **Verbo de jogo:** causar dano no bug.
+- **Mecânica:** A equipe causa dano quando descreve sintoma, causa provável e correção aplicável.
+- **Papel da equipe:** Trate cada resposta como ataque: observação correta, hipótese técnica e correção dão mais dano.
+- **Recompensa da rodada:** Bug derrotado.
+- **Registro final:** exporte o relatório para guardar pontuação, evidências e próximos passos.
 
 ## Roteiro Do Professor
 
